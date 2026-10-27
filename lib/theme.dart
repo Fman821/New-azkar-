@@ -64,29 +64,29 @@ const List<AzkarPalette> azkarPalettes = [
   AzkarPalette(
     name: 'Midnight Ottoman',
     isDark: true,
-    bg: Color(0xFF0B1A3A),
-    card: Color(0xFF13275A),
-    cardDeep: Color(0xFF0E2046),
-    navBg: Color(0xFF0A1630),
-    gold: Color(0xFFE8C15A),
-    goldSoft: Color(0xFFF2D27D),
-    goldDark: Color(0xFFA8832E),
-    orange: Color(0xFFE08A3C),
-    accent: Color(0xFF7FA6FF),
-    text: Color(0xFFF5F1E6),
-    textSoft: Color(0xFFD7DDEB),
-    muted: Color(0xFF9AA8C7),
-    border: Color(0xFF2E4A8A),
-    onGold: Color(0xFF1B1200),
+    bg: Color(0xFF0A1128),
+    card: Color(0xFF121D3A),
+    cardDeep: Color(0xFF0D1730),
+    navBg: Color(0xFF080E20),
+    gold: Color(0xFFDDA879),
+    goldSoft: Color(0xFFF0C9A4),
+    goldDark: Color(0xFF9E6848),
+    orange: Color(0xFFC98562),
+    accent: Color(0xFF8DA9D8),
+    text: Color(0xFFF8F4EF),
+    textSoft: Color(0xFFE1D8D2),
+    muted: Color(0xFFAAAFC4),
+    border: Color(0xFF55405A),
+    onGold: Color(0xFF20130D),
   ),
   // 2 - Glassmorphism & 3D
   AzkarPalette(
     name: 'Glass 3D',
     isDark: true,
-    bg: Color(0xFF0B2B20),
-    card: Color(0xFF16483C),
+    bg: Color(0xFF08261F),
+    card: Color(0xCC16483C),
     cardDeep: Color(0xFF0E3328),
-    navBg: Color(0xFF0A2A21),
+    navBg: Color(0xFF08231D),
     gold: Color(0xFFF0CD72),
     goldSoft: Color(0xFFF5DC95),
     goldDark: Color(0xFFA07C2C),
@@ -153,6 +153,8 @@ class AppColors {
     _p = azkarPalettes[index];
   }
 
+  static int get themeIndex => azkarPalettes.indexOf(_p);
+  static String get themeName => _p.name;
   static bool get isDark => _p.isDark;
   static Color get bg => _p.bg;
   static Color get card => _p.card;

@@ -146,7 +146,7 @@ class SettingsTab extends StatelessWidget {
                 style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w700),
               ),
               subtitle: Text(
-                'ቅጽ 1.2.1 (Version 1.2.1)',
+                'ቅጽ 1.2.5 (Version 1.2.5)',
                 style: TextStyle(color: AppColors.muted),
               ),
             ),

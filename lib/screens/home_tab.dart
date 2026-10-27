@@ -7,6 +7,7 @@ import '../theme.dart';
 import '../widgets/common.dart';
 import 'azkar_list_screen.dart';
 import 'names_screen.dart';
+import 'tasbih_screen.dart';
 
 class _Ayah {
   const _Ayah(this.arabic, this.amharic, this.reference);
@@ -21,6 +22,22 @@ class HomeTab extends StatelessWidget {
 
   /// Switches the bottom navigation to the tab at [index].
   final void Function(int index) onOpenTab;
+
+  static List<Color> get _morningGradient => switch (AppColors.themeIndex) {
+        0 => const [Color(0xFFE8F4EC), Color(0xFFF9F6F0)],
+        1 => const [Color(0xFF25385F), Color(0xFF0A1128)],
+        2 => const [Color(0xFF176653), Color(0xFF0A3028)],
+        3 => const [Color(0xFFE8F3E9), Color(0xFFDDEBDD)],
+        _ => const [Color(0xFF137A63), Color(0xFF063A2F)],
+      };
+
+  static List<Color> get _eveningGradient => switch (AppColors.themeIndex) {
+        0 => const [Color(0xFFF8EBD6), Color(0xFFFFFCF7)],
+        1 => const [Color(0xFF45354D), Color(0xFF10172E)],
+        2 => const [Color(0xFF15566A), Color(0xFF0A302D)],
+        3 => const [Color(0xFFE2EDE9), Color(0xFFF7F4E9)],
+        _ => const [Color(0xFF0D5A6E), Color(0xFF062A36)],
+      };
 
   static const _ayat = <_Ayah>[
     _Ayah(
@@ -81,7 +98,7 @@ class HomeTab extends StatelessWidget {
                 child: _PeriodCard(
                   category: morning,
                   icon: Icons.wb_twilight,
-                  colors: const [Color(0xFF137A63), Color(0xFF063A2F)],
+                  colors: _morningGradient,
                   onTap: () => openCategory(context, morning),
                 ),
               ),
@@ -90,7 +107,7 @@ class HomeTab extends StatelessWidget {
                 child: _PeriodCard(
                   category: evening,
                   icon: Icons.nights_stay_outlined,
-                  colors: const [Color(0xFF0D5A6E), Color(0xFF062A36)],
+                  colors: _eveningGradient,
                   onTap: () => openCategory(context, evening),
                 ),
               ),
@@ -111,6 +128,14 @@ class HomeTab extends StatelessWidget {
               const SizedBox(width: 12),
               const Expanded(child: _SoonCard()),
             ],
+          ),
+          const SizedBox(height: 16),
+          _TasbihShortcut(
+            count: state.tasbih,
+            target: state.tasbihTarget,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const TasbihScreen()),
+            ),
           ),
         ],
       ),
@@ -174,6 +199,14 @@ class _VerseCard extends StatelessWidget {
   final double fontScale;
   final double arabicScale;
 
+  static List<Color> get _verseGradient => switch (AppColors.themeIndex) {
+        0 => const [Color(0xFFFFFFFF), Color(0xFFF3ECD9)],
+        1 => const [Color(0xFF18284B), Color(0xFF0A1128)],
+        2 => const [Color(0xFF176653), Color(0xFF0A3028)],
+        3 => const [Color(0xFFFFFFFF), Color(0xFFEAF2E7)],
+        _ => const [Color(0xFF0E7A62), Color(0xFF063B31)],
+      };
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -183,7 +216,7 @@ class _VerseCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: AppColors.tile(const [Color(0xFF0E7A62), Color(0xFF063B31)]),
+          colors: AppColors.tile(_verseGradient),
         ),
         border: Border.all(color: AppColors.gold.withAlpha(140)),
         boxShadow: const [
@@ -192,6 +225,22 @@ class _VerseCard extends StatelessWidget {
       ),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.auto_awesome, size: 16, color: AppColors.gold),
+              const SizedBox(width: 7),
+              Text(
+                'የዛሬ የቁርአን አንቀጽ',
+                style: TextStyle(
+                  color: AppColors.gold,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
           Text(
             ayah.arabic,
             textAlign: TextAlign.center,
@@ -268,7 +317,7 @@ class _PeriodCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: Container(
-        height: 190,
+        height: 174,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -319,38 +368,127 @@ class _PeriodCard extends StatelessWidget {
   }
 }
 
-/// Placeholder for a section that is not ready yet.
+/// A compact, tappable tasbih shortcut that leaves the reserved tile untouched.
+class _TasbihShortcut extends StatelessWidget {
+  const _TasbihShortcut({
+    required this.count,
+    required this.target,
+    required this.onTap,
+  });
+
+  final int count;
+  final int target;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = target > 0 ? (count / target).clamp(0.0, 1.0).toDouble() : 0.0;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(22),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: AppColors.gold.withAlpha(130)),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.gold.withAlpha(AppColors.isDark ? 22 : 12),
+                blurRadius: 18,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.gold.withAlpha(24),
+                  border: Border.all(color: AppColors.gold, width: 1.5),
+                ),
+                child: Icon(Icons.fingerprint, color: AppColors.gold, size: 27),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ተስቢህ መቁጠሪያ',
+                      style: TextStyle(
+                        color: AppColors.text,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      target > 0 ? '$count / $target' : '$count ዚክሮች',
+                      style: TextStyle(color: AppColors.muted, fontSize: 12),
+                    ),
+                    const SizedBox(height: 8),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 4,
+                        backgroundColor: AppColors.gold.withAlpha(35),
+                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.gold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppColors.gold),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Reserved home-screen tile for a future feature.
 class _SoonCard extends StatelessWidget {
   const _SoonCard();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 190,
+      height: 174,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.cardDeep.withAlpha(180),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.border),
+        color: AppColors.card,
+        border: Border.all(color: AppColors.goldSoft.withAlpha(110)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.lock_clock_outlined, color: AppColors.muted, size: 34),
+          const GoldBadge(icon: Icons.auto_awesome, size: 46),
           const Spacer(),
           Text(
             'ቦታ ተይዟል',
             style: TextStyle(
-              color: AppColors.textSoft,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+              color: AppColors.gold,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             'Coming soon',
-            style: TextStyle(color: AppColors.muted, fontSize: 13),
+            style: TextStyle(color: AppColors.muted, fontSize: 12),
           ),
+          const SizedBox(height: 8),
+          Icon(Icons.more_horiz, color: AppColors.goldSoft),
         ],
       ),
     );
@@ -368,7 +506,7 @@ class _NamesCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: Container(
-        height: 190,
+        height: 174,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,

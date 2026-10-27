@@ -14,7 +14,7 @@ Arabic text with Amharic meanings, in the dark green and gold style of the origi
 
 | Tab | Contents |
 |---|---|
-| መነሻ (Home) | Verse of the day, morning and evening shortcuts, 99 names, duas, tasbih counter |
+| መነሻ (Home) | Verse of the day, morning and evening shortcuts, 99 names, and a reserved “Coming soon” feature slot |
 | አዝካር | Six categories: morning, after prayer (noon), evening, home, travel, other |
 | ጸሎት | 99 names entry point and the duas |
 | ተወዳጅ | Favourites from any section |
@@ -89,3 +89,21 @@ flutter build apk --release
 ```
 
 The repository includes a GitHub Actions workflow that builds and uploads the release APK as the `daily-azkar-apk` artifact. The source archive was statically inspected in this update, but the Flutter analyzer, tests, and APK build must still be run in an environment with Flutter installed.
+
+## Update v1.2.4
+
+- Restored the home-screen “ቦታ ተይዟል / Coming soon” card as a reserved slot for your future feature.
+- Kept Tasbih available from the Azkar tab, so the home-screen layout remains available for the planned feature.
+- Updated the package version and in-app version label to 1.2.4+7 / 1.2.4.
+- Content JSON, bundled audio references, and ZIP integrity were checked locally. Flutter analysis, automated tests, and Android APK build still require a Flutter SDK and must be run in CI or a Flutter environment.
+
+
+## Update v1.2.5 — UI/UX refresh
+
+- Refined the home screen with a clearer daily Quran verse heading and more balanced category cards.
+- Added a compact Tasbih shortcut with progress feedback while preserving the reserved “ቦታ ተይዟል / Coming soon” tile for a future feature.
+- Tuned the Midnight Ottoman palette toward midnight navy and copper/rose-gold accents.
+- Adjusted home-card gradients by selected theme for Sacred Light, Midnight Ottoman, Glass 3D, Masjid Architecture, and Dark Emerald.
+- Bumped the app version to 1.2.5+8.
+
+Validation note: the Flutter SDK was unavailable in the editing environment, so `flutter analyze`, `flutter test`, and release APK build still need to be run in a Flutter-enabled environment.
