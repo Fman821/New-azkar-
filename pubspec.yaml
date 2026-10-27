@@ -1,7 +1,7 @@
 name: daily_azkar
 description: Daily Azkar — morning, evening and daily adhkar, the 99 names of Allah and duas, with Arabic text and Amharic meanings.
 publish_to: "none"
-version: 1.2.5+8
+version: 1.2.6+9
 
 environment:
   sdk: ">=3.4.0 <4.0.0"

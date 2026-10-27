@@ -107,3 +107,11 @@ The repository includes a GitHub Actions workflow that builds and uploads the re
 - Bumped the app version to 1.2.5+8.
 
 Validation note: the Flutter SDK was unavailable in the editing environment, so `flutter analyze`, `flutter test`, and release APK build still need to be run in a Flutter-enabled environment.
+
+
+## Update v1.2.6 — Sacred background and card polish
+
+- Added a subtle, low-contrast Islamic geometric pattern and soft theme-aware gradient behind the Home screen.
+- Refined the Verse of the Day, Morning/Evening, and Coming Soon cards with softer shadows and gold edging while preserving the reserved Coming Soon tile.
+- Bumped app version to 1.2.6+9.
+- Flutter analyzer, tests, and APK build still need to be run in an environment with the Flutter SDK installed.

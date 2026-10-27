@@ -78,10 +78,26 @@ class HomeTab extends StatelessWidget {
     final dayIndex = DateTime.now().difference(DateTime(2024)).inDays;
     final ayah = _ayat[dayIndex % _ayat.length];
 
-    return SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(18, 14, 18, 28),
-        children: [
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: AppColors.isDark
+                    ? [AppColors.bg, Color.lerp(AppColors.bg, AppColors.accent, 0.10)!]
+                    : [AppColors.bg, Color.lerp(AppColors.bg, AppColors.goldSoft, 0.12)!],
+              ),
+            ),
+            child: CustomPaint(painter: _IslamicPatternPainter()),
+          ),
+        ),
+        SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(18, 14, 18, 28),
+            children: [
           _Greeting(name: state.name),
           const SizedBox(height: 18),
           _VerseCard(
@@ -137,10 +153,41 @@ class HomeTab extends StatelessWidget {
               MaterialPageRoute<void>(builder: (_) => const TasbihScreen()),
             ),
           ),
-        ],
-      ),
+            ],
+          ),
+        ),
+      ],
     );
   }
+}
+
+/// Subtle, low-contrast geometric ornament that gives the background a
+/// calm Islamic pattern without reducing text readability.
+class _IslamicPatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = (AppColors.isDark ? AppColors.gold : AppColors.goldDark)
+          .withAlpha(AppColors.isDark ? 13 : 18)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.8;
+    const gap = 58.0;
+    for (double y = 18; y < size.height + gap; y += gap) {
+      for (double x = 8; x < size.width + gap; x += gap) {
+        final path = Path()
+          ..moveTo(x, y - 12)
+          ..lineTo(x + 12, y)
+          ..lineTo(x, y + 12)
+          ..lineTo(x - 12, y)
+          ..close();
+        canvas.drawPath(path, paint);
+        canvas.drawCircle(Offset(x, y), 4, paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _IslamicPatternPainter oldDelegate) => false;
 }
 
 /// Opens an azkar category's list of items.
@@ -219,8 +266,20 @@ class _VerseCard extends StatelessWidget {
           colors: AppColors.tile(_verseGradient),
         ),
         border: Border.all(color: AppColors.gold.withAlpha(140)),
-        boxShadow: const [
-          BoxShadow(color: Color(0x80000000), blurRadius: 18, offset: Offset(0, 8)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.isDark
+                ? Colors.black.withAlpha(65)
+                : AppColors.goldDark.withAlpha(24),
+            blurRadius: 24,
+            spreadRadius: 1,
+            offset: const Offset(0, 10),
+          ),
+          BoxShadow(
+            color: AppColors.gold.withAlpha(AppColors.isDark ? 18 : 20),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
         ],
       ),
       child: Column(
@@ -326,6 +385,13 @@ class _PeriodCard extends StatelessWidget {
           ),
           border: Border.all(color: AppColors.goldSoft.withAlpha(150)),
           borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.isDark ? Colors.black.withAlpha(45) : AppColors.goldDark.withAlpha(24),
+              blurRadius: 18,
+              offset: const Offset(0, 7),
+            ),
+          ],
         ),
         child: Material(
           color: Colors.transparent,
@@ -466,8 +532,15 @@ class _SoonCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        color: AppColors.card,
+        color: AppColors.card.withAlpha(AppColors.isDark ? 230 : 245),
         border: Border.all(color: AppColors.goldSoft.withAlpha(110)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.isDark ? Colors.black.withAlpha(35) : AppColors.goldDark.withAlpha(20),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
